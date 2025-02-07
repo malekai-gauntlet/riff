@@ -54,9 +54,12 @@ class _SavedVideoViewScreenState extends State<SavedVideoViewScreen> {
 
   @override
   void dispose() {
+    // Properly cleanup each controller
     for (final controller in _controllers.values) {
+      controller.pause();  // Ensure video is paused
       controller.dispose();
     }
+    _controllers.clear();  // Clear the map
     _pageController.dispose();
     super.dispose();
   }

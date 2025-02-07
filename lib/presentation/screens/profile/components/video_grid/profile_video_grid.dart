@@ -128,7 +128,7 @@ class _ProfileVideoGridState extends State<ProfileVideoGrid> {
             builder: (context, snapshot) {
               return VideoThumbnail(
                 thumbnailUrl: snapshot.data,
-                playCount: video.playCount ?? 0,
+                likeCount: video.likeCount,
                 onTap: () {
                   print('Grid item tapped! Video ID: ${video.id}'); // Debug print
                   // Navigate to SavedVideoViewScreen

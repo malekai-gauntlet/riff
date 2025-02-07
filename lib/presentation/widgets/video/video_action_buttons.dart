@@ -26,6 +26,8 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
   // Local state to track saved and liked status
   bool? _optimisticIsSaved;
   bool? _optimisticIsLiked;
+  // Add optimistic like count
+  int? _optimisticLikeCount;
   
   // Get current user ID
   String? get _currentUserId => FirebaseAuth.instance.currentUser?.uid;
@@ -42,6 +44,11 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
     return _currentUserId != null && widget.video.likedByUsers.contains(_currentUserId!);
   }
 
+  // Get current like count with optimistic value
+  int get _likeCount {
+    return _optimisticLikeCount ?? widget.video.likeCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +63,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
               color: _isLiked ? Colors.red : Colors.white,
               size: 35,
             ),
-            label: widget.video.likeCount.toString(),
+            label: _likeCount.toString(),
             onTap: () async {
               final userId = _currentUserId;
               if (userId == null) {
@@ -66,9 +73,10 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
                 return;
               }
               
-              // Optimistically update UI
+              // Optimistically update UI including like count
               setState(() {
                 _optimisticIsLiked = !_isLiked;
+                _optimisticLikeCount = _likeCount + (_isLiked ? 1 : -1);
               });
               
               try {
@@ -90,6 +98,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
                 // Revert optimistic update on error
                 setState(() {
                   _optimisticIsLiked = null;
+                  _optimisticLikeCount = null;
                 });
                 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -102,7 +111,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
           _ActionButton(
             icon: Icon(
               _isSaved ? Icons.bookmark : Icons.bookmark_outline,
-              color: Colors.white,
+              color: _isSaved ? Colors.blue : Colors.white,
               size: 35,
             ),
             label: _isSaved ? 'Saved' : 'Save',

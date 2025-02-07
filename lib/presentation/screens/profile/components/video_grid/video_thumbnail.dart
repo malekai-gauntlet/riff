@@ -11,13 +11,13 @@ import 'dart:ui' as ui;
 class VideoThumbnail extends StatelessWidget {
   // Properties for the video thumbnail
   final String? thumbnailUrl; // URL for the video thumbnail image
-  final int playCount; // Number of plays to display
+  final int likeCount; // Number of likes to display
   final VoidCallback onTap; // Callback for when thumbnail is tapped
 
   const VideoThumbnail({
     super.key,
     this.thumbnailUrl,
-    required this.playCount,
+    required this.likeCount,
     required this.onTap,
   });
 
@@ -68,7 +68,7 @@ class VideoThumbnail extends StatelessWidget {
               ),
             ),
 
-          // Play count overlay
+          // Like count overlay
           Positioned(
             left: 8,
             bottom: 8,
@@ -81,13 +81,13 @@ class VideoThumbnail extends StatelessWidget {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.play_arrow,
+                    Icons.favorite,
                     color: Colors.white,
                     size: 14,
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    _formatCount(playCount),
+                    _formatCount(likeCount),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,

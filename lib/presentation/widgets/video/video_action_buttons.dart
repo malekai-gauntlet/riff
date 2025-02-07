@@ -4,6 +4,7 @@ import '../../../domain/video/video_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../screens/tutorial/tutorial_screen.dart';
 import 'package:video_player/video_player.dart';
+import '../comment/comment_bottom_sheet.dart';
 
 // Convert to StatefulWidget for local state management
 class VideoActionButtons extends StatefulWidget {
@@ -49,6 +50,21 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
     return _optimisticLikeCount ?? widget.video.likeCount;
   }
 
+  void _showComments(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CommentBottomSheet(
+        videoId: widget.video.id,
+        onClose: () {
+          Navigator.pop(context);
+          widget.controller?.play();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +77,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
             icon: Icon(
               _isLiked ? Icons.favorite : Icons.favorite_border,
               color: _isLiked ? Colors.red : Colors.white,
-              size: 35,
+              size: 32,
             ),
             label: _likeCount.toString(),
             onTap: () async {
@@ -112,7 +128,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
             icon: Icon(
               _isSaved ? Icons.bookmark : Icons.bookmark_outline,
               color: _isSaved ? Colors.blue : Colors.white,
-              size: 35,
+              size: 32,
             ),
             label: _isSaved ? 'Saved' : 'Save',
             onTap: () async {
@@ -171,7 +187,7 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
               child: const Icon(
                 Icons.queue_music,
                 color: Colors.white,
-                size: 35,
+                size: 32,
               ),
             ),
             label: 'Tutorial',
@@ -189,6 +205,20 @@ class _VideoActionButtonsState extends State<VideoActionButtons> {
                   ),
                 ),
               );
+            },
+          ),
+          // Comment Button
+          _ActionButton(
+            icon: const Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.white,
+              size: 24,
+            ),
+            label: 'Comments',
+            onTap: () {
+              // Pause the video when opening comments
+              widget.controller?.pause();
+              _showComments(context);
             },
           ),
           const SizedBox(height: 20), // Spacing from bottom

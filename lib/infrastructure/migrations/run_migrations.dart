@@ -4,6 +4,7 @@ import '../../firebase_options.dart';
 import 'fix_tutorial_thumbnails.dart';
 import 'add_video_data.dart';
 import 'fix_null_fields.dart';
+import 'update_missing_thumbnails.dart';
 
 /// Main function to run migrations
 Future<void> main() async {
@@ -20,6 +21,11 @@ Future<void> main() async {
     
     // Run the fix null fields migration
     await fixNullFields();
+    
+    print('Running thumbnail update migration...');
+    
+    // Run the thumbnail update migration
+    await updateMissingThumbnails();
     
     print('\nMigration completed successfully!');
   } catch (e) {

@@ -123,28 +123,23 @@ class _ProfileVideoGridState extends State<ProfileVideoGrid> {
         itemCount: _savedVideos.length,
         itemBuilder: (context, index) {
           final video = _savedVideos[index];
-          return FutureBuilder<String>(
-            future: _videoRepository.getThumbnailUrl(video.id),
-            builder: (context, snapshot) {
-              return VideoThumbnail(
-                thumbnailUrl: snapshot.data,
-                likeCount: video.likeCount,
-                onTap: () {
-                  print('Grid item tapped! Video ID: ${video.id}'); // Debug print
-                  // Navigate to SavedVideoViewScreen
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        print('Building SavedVideoViewScreen...'); // Debug print
-                        return SavedVideoViewScreen(
-                          initialVideo: video,
-                          savedVideos: _savedVideos,
-                          initialIndex: index,
-                        );
-                      },
-                    ),
-                  );
-                },
+          return VideoThumbnail(
+            thumbnailUrl: video.thumbnailUrl,
+            likeCount: video.likeCount,
+            onTap: () {
+              print('Grid item tapped! Video ID: ${video.id}'); // Debug print
+              // Navigate to SavedVideoViewScreen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    print('Building SavedVideoViewScreen...'); // Debug print
+                    return SavedVideoViewScreen(
+                      initialVideo: video,
+                      savedVideos: _savedVideos,
+                      initialIndex: index,
+                    );
+                  },
+                ),
               );
             },
           );
